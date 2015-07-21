@@ -1,0 +1,42 @@
+---
+title: "final_p"
+author: "dm"
+date: "July 7, 2015"
+output: html_document
+---
+##analysis of gapminder data
+Download gapminder data
+
+```{r first chunk, warning=FALSE, message = FALSE}
+    library(ggplot2)
+    library(dplyr)
+    df <- read.csv ("gapminder-FiveYearData.csv")
+```
+###GDP per year for Canada, Greece, and Japan
+
+```{r second chunk}
+    gm_sm<- df %>% 
+        filter(country == c('Japan', 'Canada', 'Greece')) %>%
+        select(country, year, gdpPercap)
+    ggplot(data = gm_sm, aes(x=year, y = gdpPercap, color = country)) +
+        geom_point() +
+        facet_wrap(~ country)
+    
+```
+
+###Mean, min and max life expectancies for each continent in 2007.
+
+```{r}
+   df %>%
+        filter(year=='2007') %>%
+        group_by(continent) %>%
+        summarize(meanlifeExp = mean(lifeExp), minlifeExp = min(lifeExp), maxlifeExp = max(lifeExp)) 
+```
+Lowest life expectancy (mean, min, and max) is observed in Africa. Maximal mean life expectancy is observed in Oceania. The widest range of life expectancies is in Asia.
+
+```{r}
+    ggplot(data = df, aes(x=lifeExp, color = continent, fill = continent, alpha = 0.5)) +
+        geom_histogram()
+    ggplot(data = df, aes(x=lifeExp, color = continent, fill = continent, alpha = 0.5)) +
+        geom_histogram(binwidth =1)
+```
